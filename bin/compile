@@ -14,6 +14,10 @@ unset GIT_DIR
 SCONS_VERSION="1.2.0"
 S3_BUCKET="heroku-buildpack-nodejs"
 
+PHANTOM_VERSION="1.7.0"
+PHANTOM_S3_BUCKET="stomita-buildpack-phantomjs"
+PHANTOM_FILENAME="buildpack-phantomjs-${PHANTOM_VERSION}.tar.gz"
+
 # parse and derive params
 BUILD_DIR=$1
 CACHE_DIR=$2
@@ -143,11 +147,13 @@ CACHE_TARGET_DIR="$BUILD_DIR/node_modules"
 NODE_PACKAGE="http://${S3_BUCKET}.s3.amazonaws.com/nodejs-${NODE_VERSION}.tgz"
 NPM_PACKAGE="http://${S3_BUCKET}.s3.amazonaws.com/npm-${NPM_VERSION}.tgz"
 SCONS_PACKAGE="http://${S3_BUCKET}.s3.amazonaws.com/scons-${SCONS_VERSION}.tgz"
+PHANTOM_PACKAGE="http://${PHANTOM_S3_BUCKET}.s3.amazonaws.com/${PHANTOM_FILENAME}"
 
 # vendor directories
 VENDORED_NODE="$(mktmpdir node)"
 VENDORED_NPM="$(mktmpdir npm)"
 VENDORED_SCONS="$(mktmpdir scons)"
+VENDORED_PHANTOM="$(mktmpdir phantomjs)"
 
 # download and unpack packages
 echo "-----> Fetching Node.js binaries"
@@ -155,11 +161,20 @@ package_download "nodejs" "${NODE_VERSION}" "${VENDORED_NODE}"
 package_download "npm" "${NPM_VERSION}" "${VENDORED_NPM}"
 package_download "scons" "${SCONS_VERSION}" "${VENDORED_SCONS}"
 
+
+echo "-----> Fetching Phantom.js binaries"
+mkdir -p "$BUILD_DIR/bin"
+curl $PHANTOM_PACKAGE -s -o - | tar xzf - -C $VENDORED_PHANTOM
+
 # vendor node into the slug
 PATH="$BUILD_DIR/bin:$PATH"
 echo "-----> Vendoring node into slug"
 mkdir -p "$BUILD_DIR/bin"
 cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
+
+# vendor phantomjs into the slug
+echo "-----> Vendoring phantomjs into slug"
+cp "$VENDORED_PHANTOM/bin/phantomjs" "$BUILD_DIR/bin/phantomjs"
 
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
@@ -169,6 +184,7 @@ export CPPPATH="$INCLUDE_PATH"
 
 # install dependencies with npm
 echo "-----> Installing dependencies with npm"
+run_npm "install -g npm"
 run_npm "install --production"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
