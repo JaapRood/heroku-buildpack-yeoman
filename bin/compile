@@ -203,7 +203,7 @@ run_npm "install -g yeoman"
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
 
 echo "-----> Installing Compass gem"
-/usr/local/bin/gem install compass --no-rdc --no-ri | indent
+/usr/local/bin/gem install compass --no-rdoc --no-ri | indent
 # PATH="$BUILD_DIR/gems/compass/bin:$PATH"
 
 echo "-----> Installing project dependencies with npm"
