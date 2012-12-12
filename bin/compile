@@ -191,7 +191,7 @@ run_npm "install -g yeoman"
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
 
 echo "-----> Installing Compass gem"
-gem install compass
+gem install compass -i "$CACHE_DIR/gems"
 
 echo "-----> Installing project dependencies with npm"
 run_npm "install --production"
