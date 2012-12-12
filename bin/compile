@@ -183,18 +183,20 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
 # install dependencies with npm
-echo "-----> Installing Yeoman with npm"
 run_npm "install -g npm"
+
+echo "-----> Installing Yeoman with npm"
 run_npm "install -g yeoman"
-
-
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
-echo "Running yeoman $(yeoman -v)"
+
 
 echo "-----> Installing project dependencies with npm"
 run_npm "install --production"
 run_npm "rebuild"
 echo "Dependencies installed" | indent
+
+echo "-----> Building application with Yeoman"
+yeoman --skip-updater --disable-insight build
 
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
