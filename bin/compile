@@ -176,6 +176,18 @@ cp "$VENDORED_NODE/bin/node" "$BUILD_DIR/bin/node"
 echo "-----> Vendoring phantomjs into slug"
 cp "$VENDORED_PHANTOM/bin/phantomjs" "$BUILD_DIR/bin/phantomjs"
 
+
+# install gems into /app/.gems and set up the environment
+echo "-----> Setting up gems"
+cat << EOF > ~/.gemrc
+gemhome: $BUILD_DIR/.gems
+gempath:
+- $BUILD_DIR/.gems
+EOF
+
+export GEM_HOME="$BUILD_DIR/.gems"
+export PATH="$BUILD_DIR/.gems/bin:$PATH"
+
 # setting up paths for building
 PATH="$VENDORED_SCONS:$VENDORED_NODE/bin:$PATH"
 INCLUDE_PATH="$VENDORED_NODE/include"
@@ -191,8 +203,8 @@ run_npm "install -g yeoman"
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
 
 echo "-----> Installing Compass gem"
-gem install compass -i "$CACHE_DIR/gems/compass" | indent
-PATH="$CACHE_DIR/gems/compass/bin:$PATH"
+/usr/local/bin/gem install compass --no-rdc --no-ri | indent
+# PATH="$BUILD_DIR/gems/compass/bin:$PATH"
 
 echo "-----> Installing project dependencies with npm"
 run_npm "install --production"
