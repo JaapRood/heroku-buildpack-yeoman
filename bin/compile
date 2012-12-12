@@ -190,6 +190,8 @@ echo "-----> Installing Yeoman with npm"
 run_npm "install -g yeoman"
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
 
+echo "-----> Installing Compass gem"
+gem install compass
 
 echo "-----> Installing project dependencies with npm"
 run_npm "install --production"
