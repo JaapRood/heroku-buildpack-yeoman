@@ -200,6 +200,8 @@ run_npm "rebuild"
 echo "Dependencies installed" | indent
 
 echo "-----> Building application with Yeoman"
+cd "$HOME"
+echo "$(pwd)"
 yeoman --skip-updater --disable-insight build | indent
 
 echo "-----> Building runtime environment"
