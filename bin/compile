@@ -202,6 +202,7 @@ echo "Dependencies installed" | indent
 echo "-----> Building application with Yeoman"
 cd "$HOME"
 echo "$(pwd)"
+ls -la
 yeoman --skip-updater --disable-insight build | indent
 
 echo "-----> Building runtime environment"
