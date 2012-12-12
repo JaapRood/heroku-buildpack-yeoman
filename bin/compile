@@ -191,7 +191,7 @@ run_npm "install -g yeoman"
 PATH="$HOME/node_modules/yeoman/bin:$PATH"
 
 echo "-----> Installing Compass gem"
-gem install compass -i "$CACHE_DIR/gems/compass"
+gem install compass -i "$CACHE_DIR/gems/compass" | indent
 PATH="$CACHE_DIR/gems/compass/bin:$PATH"
 
 echo "-----> Installing project dependencies with npm"
@@ -200,7 +200,7 @@ run_npm "rebuild"
 echo "Dependencies installed" | indent
 
 echo "-----> Building application with Yeoman"
-yeoman --skip-updater --disable-insight build
+yeoman --skip-updater --disable-insight build | indent
 
 echo "-----> Building runtime environment"
 mkdir -p $BUILD_DIR/.profile.d
