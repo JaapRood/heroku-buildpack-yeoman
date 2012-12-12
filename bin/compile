@@ -183,6 +183,7 @@ export CPATH="$INCLUDE_PATH"
 export CPPPATH="$INCLUDE_PATH"
 
 # install dependencies with npm
+echo "-----> Installing npm globally with npm"
 run_npm "install -g npm"
 
 echo "-----> Installing Yeoman with npm"
